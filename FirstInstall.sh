@@ -16,6 +16,11 @@ sudo apt-get install mdadm git usbmount -y
 curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
+git clone git@github.com:darkterra/Node-Nas-Manager.git && cd Node-Nas-Manager
+
+npm i
+node server.js &
+
 # TODO: Test and mound Disks
 
 # This install is now finish => Time to remove this First Install Script...
@@ -23,4 +28,4 @@ sudo apt-get install -y nodejs
 
 echo "Done..."
 sleep 2
-sudo reboot
+# sudo reboot
