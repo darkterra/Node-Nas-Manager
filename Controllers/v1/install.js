@@ -10,6 +10,26 @@ module.exports = {
       socket.on('message', data => console.log(data));
       socket.on('disconnect', data => console.log(`Disconected: ${data}`));
     });
+    
+    fastify.get('/RAID1', async (request, reply) => {
+      let response = null;
+
+      try {
+        const { stdout, stderr } = await exec('sudo mdadm --create --verbose /dev/md0 --level=mirror --raid-devices=2 /dev/sda1 /dev/sdb1');
+        console.log('stdout:', stdout);
+        console.log('stderr:', stderr);
+
+        response = stdout || stderr;
+      }
+      catch (e) {
+        console.error(`There is an error: ${e}`);
+        throw e;
+      }
+      finally {
+        return { response };
+      }
+    });
+
     fastify.get('/:command', async (request, reply) => {
       let response = null;
 
