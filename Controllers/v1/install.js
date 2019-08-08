@@ -12,7 +12,7 @@ module.exports = {
       socket.on('disconnect', data => console.log(`Disconected: ${data}`));
     });
 
-    // TODO: Cange this by a post and get data from body
+    // TODO: Change this by a post and get data from body
     fastify.get('/moutedDevices/:fileSys', async (request, reply) => {
       let response = null;
 
@@ -92,8 +92,8 @@ module.exports = {
 
       try {
         const { stdout, stderr } = await exec('echo yes | sudo mdadm --create --verbose /dev/md0 --level=mirror --raid-devices=2 /dev/sda1 /dev/sdb1');
-        console.log('stdout:', stdout);
-        console.log('stderr:', stderr);
+        // console.log('stdout:', stdout);
+        // console.log('stderr:', stderr);
 
         response = stdout || stderr;
       }
@@ -112,8 +112,8 @@ module.exports = {
 
       try {
         const { stdout, stderr } = await exec('cat /proc/mdstat');
-        console.log('stdout:', stdout);
-        console.log('stderr:', stderr);
+        // console.log('stdout:', stdout);
+        // console.log('stderr:', stderr);
 
         response = stdout || stderr;
       }
@@ -159,8 +159,8 @@ module.exports = {
         console.log(request.params);
 
         const { stdout, stderr } = await exec(request.params.command);
-        console.log('stdout:', stdout);
-        console.log('stderr:', stderr);
+        // console.log('stdout:', stdout);
+        // console.log('stderr:', stderr);
 
         response = stdout || stderr;
       }
