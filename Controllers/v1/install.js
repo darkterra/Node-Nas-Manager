@@ -127,29 +127,29 @@ module.exports = {
       }
     });
     
-    // fastify.get('/progress', async (request, reply) => {
-    //   let response = null;
+    fastify.get('/saveConf', async (request, reply) => {
+      let response = null;
 
-    //   try {
-    //     let { stdout, stderr } = await exec('sudo /etc/mdadm/mdadm.conf /etc/mdadm/mdadm.conf.backup');
-    //     console.log('stdout:', stdout);
-    //     console.log('stderr:', stderr);
+      try {
+        let { stdout, stderr } = await exec('sudo /etc/mdadm/mdadm.conf /etc/mdadm/mdadm.conf.backup');
+        // console.log('stdout:', stdout);
+        // console.log('stderr:', stderr);
 
-    //     // { stdout, stderr } = await exec('mdadm --detail --scan >> /etc/mdadm/mdadm.conf');
-    //     // console.log('stdout:', stdout);
-    //     // console.log('stderr:', stderr);
+        // { stdout, stderr } = await exec('mdadm --detail --scan >> /etc/mdadm/mdadm.conf');
+        // console.log('stdout:', stdout);
+        // console.log('stderr:', stderr);
 
-    //     response = stdout || stderr;
-    //   }
-    //   catch (e) {
-    //     console.error(`There is an error: ${e}`);
-    //     response = e;
-    //     throw e;
-    //   }
-    //   finally {
-    //     return { response };
-    //   }
-    // });
+        response = stdout || stderr;
+      }
+      catch (e) {
+        console.error(`There is an error: ${e}`);
+        response = e;
+        throw e;
+      }
+      finally {
+        return { response };
+      }
+    });
 
     fastify.get('/:command', async (request, reply) => {
       let response = null;
