@@ -131,15 +131,17 @@ module.exports = {
       let response = null;
 
       try {
+        console.log('exec: "sudo cp /etc/mdadm/mdadm.conf /etc/mdadm/mdadm.conf.backup"');
         let { stdout, stderr } = await exec('sudo cp /etc/mdadm/mdadm.conf /etc/mdadm/mdadm.conf.backup');
         // console.log('stdout:', stdout);
         // console.log('stderr:', stderr);
 
+        console.log('exec: "mdadm --detail --scan >> /etc/mdadm/mdadm.conf"');
         let { stdout2, stderr2 } = await exec('mdadm --detail --scan >> /etc/mdadm/mdadm.conf');
         // console.log('stdout:', stdout);
         // console.log('stderr:', stderr);
 
-        response = stdout || stderr;
+        response = stdout || stderr || stdout2 || stderr2;
       }
       catch (e) {
         console.error(`There is an error: ${e}`);
