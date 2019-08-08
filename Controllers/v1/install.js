@@ -162,8 +162,8 @@ module.exports = {
       let response = null;
 
       try {
-        console.log('exec: "mkfs.ext4 -v -m .1 -b 4096 -E stride=32,stripe-width=64 /dev/md0"');
-        let { stdout, stderr } = await exec('mkfs.ext4 -v -m .1 -b 4096 -E stride=32,stripe-width=64 /dev/md0');
+        console.log('exec: "sudo mkfs.ext4 -v -m .1 -b 4096 -E stride=32,stripe-width=64 /dev/md0"');
+        let { stdout, stderr } = await exec('sudo mkfs.ext4 -v -m .1 -b 4096 -E stride=32,stripe-width=64 /dev/md0');
 
         response = stdout || stderr || stdout2 || stderr2;
       }
