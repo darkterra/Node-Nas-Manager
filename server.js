@@ -1,8 +1,10 @@
 'use strict';
 
 // Core requirement
+const { join } = require('path');
 const fastify = require('fastify')({ logger: true });
-const helmet = require('fastify-helmet')
+const helmet = require('fastify-helmet');
+const statics = require('fastify-static');
 
 // WS
 const io = require('socket.io')(fastify.server);
@@ -21,14 +23,32 @@ fastify.register(helmet);
 // Add all important data for all app
 fastify.decorate('io', io);
 
+// Static files général (View)
+fastify.register(statics, {
+  root: join(__dirname, 'View'),
+  prefix: '/', // optional: default '/'
+  decorateReply: false
+});
+
+// Static Files (Webix)
+fastify.register(statics, {
+  root: join(__dirname, 'node_modules', 'webix'),
+  prefix: '/webix/', // optional: default '/'
+});
+
 // Routing
 fastify.register(User.router, { prefix: '/v1/user', io });
 fastify.register(Install.router, { prefix: '/v1/install', io });
 
-fastify.get('/', async (request, reply) => {
-  // console.log(request);
-  return { hello: 'world' };
+fastify.addHook('onSend', function (req, reply, payload, next) {
+  console.log(payload.filename)
+  next()
 });
+
+// fastify.get('/', async (request, reply) => {
+//   // console.log(request);
+//   return { hello: 'world' };
+// });
 
 // io.on('connection', socket => {
 //   socket.on('message', data => console.log(data));

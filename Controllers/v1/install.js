@@ -10,12 +10,87 @@ module.exports = {
       socket.on('message', data => console.log(data));
       socket.on('disconnect', data => console.log(`Disconected: ${data}`));
     });
+
+    // TODO: Cange this by a post and get data from body
+    fastify.get('/moutedDevices/:fileSys', async (request, reply) => {
+      let response = null;
+
+      try {
+        const { stdout, stderr } = await exec('df -h');
+        if (stderr) {
+          response = stderr;
+        }
+        else {
+          let data = stdout.split('\n');
+          
+          if (data.length > 0) {
+            console.log(data.shift());
+            
+            data = data.filter(element => element !== '').map(element => element.split(' ').filter(element => element !== ''));
+
+            data = data.map(element => {
+              const [fileSys, total, use, free, percentUse, mount] = element;
+  
+              return { fileSys, total, use, free, percentUse, mount };
+            });
+          }
+          
+          if (request.params.fileSys) {
+            data = data.filter(element => element.fileSys === request.params.fileSys);
+          }
+  
+          console.log('data:', data);
+          console.log('stderr:', stderr);
+          
+          response = data;
+        }
+      }
+      catch (e) {
+        console.error(`There is an error: ${e}`);
+        throw e;
+      }
+      finally {
+        return { response };
+      }
+    });
+
+    fastify.get('/blkid', async (request, reply) => {
+      let response = null;
+
+      try {
+        const { stdout, stderr } = await exec('blkid');
+        let data = stdout.replace(/"/g, '').split('\n');
+
+        if (data.length > 0) {
+          data = data.filter(element => element.includes('UUID=') && element !== '').map(element => {
+            const [FILESYS, REST] = element.split(':');
+
+            const temp = REST.split(' ').filter(element => element !== '');
+            const { LABEL, UUID, TYPE, PARTUUID } = Object.fromEntries(temp.map(el => el.split('=')));
+            
+            return { FILESYS, LABEL, UUID, TYPE, PARTUUID };
+          }).filter(element => element.LABEL !== 'boot' || element.LABEL !== 'rootfs');
+        }
+        
+        console.log('data:', data);
+        console.log('stderr:', stderr);
+        
+        response = data || stderr;
+      }
+      catch (e) {
+        console.error(`There is an error: ${e}`);
+        throw e;
+      }
+      finally {
+        return { response };
+      }
+    });
     
     fastify.get('/RAID1', async (request, reply) => {
       let response = null;
 
       try {
-        const { stdout, stderr } = await exec('sudo mdadm --create --verbose /dev/md0 --level=mirror --raid-devices=2 /dev/sda1 /dev/sdb1');
+        const { stdout, stderr } = await exec('echo yes | sudo mdadm --create --verbose /dev/md0 --level=mirror --raid-devices=2 /dev/sda1 /dev/sdb1');
         console.log('stdout:', stdout);
         console.log('stderr:', stderr);
 
@@ -23,6 +98,51 @@ module.exports = {
       }
       catch (e) {
         console.error(`There is an error: ${e}`);
+        response = e;
+        throw e;
+      }
+      finally {
+        return { response };
+      }
+    });
+    
+    fastify.get('/progress', async (request, reply) => {
+      let response = null;
+
+      try {
+        const { stdout, stderr } = await exec('cat /proc/mdstat');
+        console.log('stdout:', stdout);
+        console.log('stderr:', stderr);
+
+        response = stdout || stderr;
+      }
+      catch (e) {
+        console.error(`There is an error: ${e}`);
+        response = e;
+        throw e;
+      }
+      finally {
+        return { response };
+      }
+    });
+    
+    fastify.get('/progress', async (request, reply) => {
+      let response = null;
+
+      try {
+        let { stdout, stderr } = await exec('sudo /etc/mdadm/mdadm.conf /etc/mdadm/mdadm.conf.backup');
+        console.log('stdout:', stdout);
+        console.log('stderr:', stderr);
+
+        { stdout, stderr } = await exec('mdadm --detail --scan >> /etc/mdadm/mdadm.conf');
+        console.log('stdout:', stdout);
+        console.log('stderr:', stderr);
+
+        response = stdout || stderr;
+      }
+      catch (e) {
+        console.error(`There is an error: ${e}`);
+        response = e;
         throw e;
       }
       finally {

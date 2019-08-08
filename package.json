@@ -10,6 +10,8 @@
     "dependencies": {
       "fastify": "^2.7.1",
       "fastify-helmet": "^3.0.1",
-      "socket.io": "^2.2.0"
+      "fastify-static": "^2.5.0",
+      "socket.io": "^2.2.0",
+      "webix": "^6.4.0"
     }
   }
