@@ -135,7 +135,7 @@ module.exports = {
         // console.log('stdout:', stdout);
         // console.log('stderr:', stderr);
 
-        let { stdout, stderr } = await exec('mdadm --detail --scan >> /etc/mdadm/mdadm.conf');
+        let { stdout2, stderr2 } = await exec('mdadm --detail --scan >> /etc/mdadm/mdadm.conf');
         // console.log('stdout:', stdout);
         // console.log('stderr:', stderr);
 
