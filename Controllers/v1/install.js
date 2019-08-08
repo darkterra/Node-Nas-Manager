@@ -133,13 +133,13 @@ module.exports = {
       try {
         console.log('exec: "sudo cp /etc/mdadm/mdadm.conf /etc/mdadm/mdadm.conf.backup"');
         let { stdout, stderr } = await exec('sudo cp /etc/mdadm/mdadm.conf /etc/mdadm/mdadm.conf.backup');
-        await exec('sudo cp /etc/mdadm/mdadm.conf ./mdadm.conf');
+        await exec('sudo cp /etc/mdadm/mdadm.conf /home/pi/mdadm.conf');
         // console.log('stdout:', stdout);
         // console.log('stderr:', stderr);
 
         console.log('exec: "mdadm --detail --scan >> /etc/mdadm/mdadm.conf"');
-        let { stdout2, stderr2 } = await exec('sudo mdadm --detail --scan >> ./mdadm.conf');
-        await exec('sudo mv ./mdadm.conf /etc/mdadm/mdadm.conf');
+        let { stdout2, stderr2 } = await exec('sudo mdadm --detail --scan >> /home/pi/mdadm.conf');
+        await exec('sudo mv /home/pi/mdadm.conf /etc/mdadm/mdadm.conf');
         // console.log('stdout:', stdout);
         // console.log('stderr:', stderr);
 
