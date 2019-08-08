@@ -156,6 +156,27 @@ module.exports = {
       }
     });
 
+    
+    
+    fastify.get('/format', async (request, reply) => {
+      let response = null;
+
+      try {
+        console.log('exec: "mkfs.ext4 -v -m .1 -b 4096 -E stride=32,stripe-width=64 /dev/md0"');
+        let { stdout, stderr } = await exec('mkfs.ext4 -v -m .1 -b 4096 -E stride=32,stripe-width=64 /dev/md0');
+
+        response = stdout || stderr || stdout2 || stderr2;
+      }
+      catch (e) {
+        console.error(`There is an error: ${e}`);
+        response = e;
+        throw e;
+      }
+      finally {
+        return { response };
+      }
+    });
+
     fastify.get('/:command', async (request, reply) => {
       let response = null;
 
