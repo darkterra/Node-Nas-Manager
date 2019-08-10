@@ -198,6 +198,26 @@ module.exports = {
         return { response };
       }
     });
+    
+    
+    fastify.get('/mountRAID1', async (request, reply) => {
+      let response = null;
+
+      try {
+        console.log('exec: "sudo mount /dev/md0 /mnt"');
+        let { stdout, stderr } = await exec('sudo mount /dev/md0 /mnt');
+
+        response = stdout || stderr || stdout2 || stderr2;
+      }
+      catch (e) {
+        console.error(`There is an error: ${e}`);
+        response = e;
+        throw e;
+      }
+      finally {
+        return { response };
+      }
+    });
 
     fastify.get('/:command', async (request, reply) => {
       let response = null;
