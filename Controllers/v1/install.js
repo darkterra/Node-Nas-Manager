@@ -131,12 +131,18 @@ module.exports = {
       try {
         console.log('exec: "sudo cp /etc/mdadm/mdadm.conf /etc/mdadm/mdadm.conf.backup"');
         let { stdout, stderr } = await exec('sudo cp /etc/mdadm/mdadm.conf /etc/mdadm/mdadm.conf.backup');
+        console.log('exec: "sudo cp /etc/mdadm/mdadm.conf /home/pi/mdadm.temp"');
         await exec('sudo cp /etc/mdadm/mdadm.conf /home/pi/mdadm.temp');
-        // console.log('stdout:', stdout);
-        // console.log('stderr:', stderr);
+
+        console.log('exec: "sudo chown pi:pi /home/pi/mdadm.temp"');
+        await exec('sudo chown pi:pi /home/pi/mdadm.temp');
 
         console.log('exec: "sudo mdadm --detail --scan >> /home/pi/mdadm.temp"');
         let { stdout2, stderr2 } = await exec('sudo mdadm --detail --scan >> /home/pi/mdadm.temp');
+
+        console.log('exec: "sudo chown root:root /home/pi/mdadm.temp"');
+        await exec('sudo chown root:root /home/pi/mdadm.temp');
+
         console.log('exec: "sudo mv /home/pi/mdadm.temp /etc/mdadm/mdadm.conf"');
         await exec('sudo mv /home/pi/mdadm.temp /etc/mdadm/mdadm.conf');
         // console.log('stdout:', stdout);
