@@ -131,14 +131,14 @@ module.exports = {
       try {
         console.log('exec: "sudo cp /etc/mdadm/mdadm.conf /etc/mdadm/mdadm.conf.backup"');
         let { stdout, stderr } = await exec('sudo cp /etc/mdadm/mdadm.conf /etc/mdadm/mdadm.conf.backup');
-        await exec('sudo cp /etc/mdadm/mdadm.conf /home/pi/mdadm.conf');
+        await exec('sudo cp /etc/mdadm/mdadm.conf /home/pi/mdadm.temp');
         // console.log('stdout:', stdout);
         // console.log('stderr:', stderr);
 
-        console.log('exec: "sudo mdadm --detail --scan >> /home/pi/mdadm.conf"');
-        let { stdout2, stderr2 } = await exec('sudo mdadm --detail --scan >> /home/pi/mdadm.conf');
-        console.log('exec: "sudo mv /home/pi/mdadm.conf /etc/mdadm/mdadm.conf"');
-        await exec('sudo mv /home/pi/mdadm.conf /etc/mdadm/mdadm.conf');
+        console.log('exec: "sudo mdadm --detail --scan >> /home/pi/mdadm.temp"');
+        let { stdout2, stderr2 } = await exec('sudo mdadm --detail --scan >> /home/pi/mdadm.temp');
+        console.log('exec: "sudo mv /home/pi/mdadm.temp /etc/mdadm/mdadm.conf"');
+        await exec('sudo mv /home/pi/mdadm.temp /etc/mdadm/mdadm.conf');
         // console.log('stdout:', stdout);
         // console.log('stderr:', stderr);
 
@@ -153,10 +153,28 @@ module.exports = {
         return { response };
       }
     });
+    
+    fastify.get('/formatHDDs', async (request, reply) => {
+      let response = null;
 
+      try {
+        console.log('exec: "sudo mkfs.vfat /dev/sda1 && sudo mkfs.vfat /dev/sdb1"');
+        let { stdout, stderr } = await exec('sudo mkfs.vfat /dev/sda1 && sudo mkfs.vfat /dev/sdb1');
+
+        response = stdout || stderr || stdout2 || stderr2;
+      }
+      catch (e) {
+        console.error(`There is an error: ${e}`);
+        response = e;
+        throw e;
+      }
+      finally {
+        return { response };
+      }
+    });
     
     
-    fastify.get('/format', async (request, reply) => {
+    fastify.get('/formatRAID1', async (request, reply) => {
       let response = null;
 
       try {
