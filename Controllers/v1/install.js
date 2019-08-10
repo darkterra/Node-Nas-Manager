@@ -1,7 +1,8 @@
 'use strict';
 
-const util = require('util');
+// const util = require('util');
 // const exec = util.promisify(require('child_process').exec);
+const { mkdirSync } = require('fs');s
 const { exec } = require('shelljs');
 
 // v1/install.js
@@ -179,7 +180,6 @@ module.exports = {
       }
     });
     
-    
     fastify.get('/formatRAID1', async (request, reply) => {
       let response = null;
 
@@ -199,13 +199,34 @@ module.exports = {
       }
     });
     
-    
     fastify.get('/mountRAID1', async (request, reply) => {
+      let response = null;
+      
+      console.log('Create the USBHDD folder');
+      mkdirSync('/media/USBHDD');
+
+      try {
+        console.log('exec: "sudo mount /dev/md0 /media/USBHDD/"');
+        let { stdout, stderr } = await exec('sudo mount /dev/md0 /media/USBHDD/');
+
+        response = stdout || stderr;
+      }
+      catch (e) {
+        console.error(`There is an error: ${e}`);
+        response = e;
+        throw e;
+      }
+      finally {
+        return { response };
+      }
+    });
+    
+    fastify.get('/umountRAID1', async (request, reply) => {
       let response = null;
 
       try {
-        console.log('exec: "sudo mount /dev/md0 /mnt"');
-        let { stdout, stderr } = await exec('sudo mount /dev/md0 /mnt');
+        console.log('exec: "sudo umount /dev/md0"');
+        let { stdout, stderr } = await exec('sudo umount /dev/md0');
 
         response = stdout || stderr;
       }
