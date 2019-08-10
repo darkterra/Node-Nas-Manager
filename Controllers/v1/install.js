@@ -165,8 +165,8 @@ module.exports = {
       let response = null;
 
       try {
-        console.log('exec: "sudo mkfs.vfat /dev/sda1 && sudo mkfs.vfat /dev/sdb1"');
-        let { stdout, stderr } = await exec('sudo mkfs.vfat /dev/sda1 && sudo mkfs.vfat /dev/sdb1');
+        console.log('exec: "sudo mkfs.vfat -F 32 /dev/sda1 && sudo mkfs.vfat -F 32 /dev/sdb1"');
+        let { stdout, stderr } = await exec('sudo mkfs.vfat -F 32 /dev/sda1 && sudo mkfs.vfat -F 32 /dev/sdb1');
 
         response = stdout || stderr;
       }
