@@ -16,10 +16,12 @@ sudo touch /boot/ssh
 
 # Install all important tools
 echo "Install all important tools"
-sudo apt-get install mdadm samba samba-common-bin git usbmount htop -y
+sudo apt-get install mdadm samba samba-common-bin git htop -y
+
+# Install usbmount after creating the RAID 1 ?
 
 # Install Node.js
-echo "Install Node.js"
+echo "Install Node.js v12"
 curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
@@ -40,12 +42,9 @@ echo "Launch the service"
 pm2 start server.js
 
 
-# TODO: Test and mound Disks
-
 # This install is now finish => Time to remove this First Install Script...
-# sudo rm -fr /boot/FirstInstall.sh
-
 echo "Done..."
 ifconfig | grep "inet 192"
 sleep 3
+sudo rm -fr /boot/FirstInstall.sh
 sudo reboot
