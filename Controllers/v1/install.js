@@ -202,10 +202,10 @@ module.exports = {
     fastify.get('/mountRAID1', async (request, reply) => {
       let response = null;
       
-      console.log('Create the USBHDD folder');
-      mkdirSync('/media/USBHDD');
-
       try {
+        console.log('Create the USBHDD folder');
+        await exec('sudo mkdir /media/USBHDD');
+
         console.log('exec: "sudo mount /dev/md0 /media/USBHDD/"');
         let { stdout, stderr } = await exec('sudo mount /dev/md0 /media/USBHDD/');
 
