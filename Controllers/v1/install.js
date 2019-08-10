@@ -96,6 +96,8 @@ module.exports = {
         // console.log('stderr:', stderr);
 
         response = stdout || stderr;
+
+        requestProgressionRAID_UntilIsFinish();
       }
       catch (e) {
         console.error(`There is an error: ${e}`);
@@ -111,11 +113,7 @@ module.exports = {
       let response = null;
 
       try {
-        const { stdout, stderr } = await exec('cat /proc/mdstat');
-        // console.log('stdout:', stdout);
-        // console.log('stderr:', stderr);
-
-        response = stdout || stderr;
+        response = await getProgressionRAID();
       }
       catch (e) {
         console.error(`There is an error: ${e}`);
@@ -201,4 +199,44 @@ module.exports = {
     done();
   },
   events: () => undefined
+}
+
+
+
+
+async function getProgressionRAID () {
+  let response = null;
+  try {
+    const { stdout, stderr } = await exec('cat /proc/mdstat');
+    // console.log('stdout:', stdout);
+    // console.log('stderr:', stderr);
+
+    response = stdout || stderr;
+  }
+  catch (e) {
+    console.error(`There is an error: ${e}`);
+    response = e;
+    throw e;
+  }
+  finally {
+    return response;
+  }
+}
+
+function requestProgressionRAID_UntilIsFinish () {
+  let syncFinish = false;
+  let response = null;
+  let idInterval = null;
+
+  // if (!syncFinish) {
+    idInterval = setInterval(() => {
+      response = getProgressionRAID();
+      console.log('Progess: ', response);
+      
+      if (response.includes('resync')) {
+        // syncFinish = true;
+        idInterval && clearInterval(idInterval);
+      }
+    }, 1000 * 60);
+  // }
 }
