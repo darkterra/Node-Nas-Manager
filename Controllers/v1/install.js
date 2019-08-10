@@ -2,7 +2,7 @@
 
 // const util = require('util');
 // const exec = util.promisify(require('child_process').exec);
-const { mkdirSync } = require('fs');s
+const { mkdirSync } = require('fs');
 const { exec } = require('shelljs');
 
 // v1/install.js
