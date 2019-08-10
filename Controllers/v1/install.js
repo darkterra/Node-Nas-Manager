@@ -167,7 +167,7 @@ module.exports = {
         console.log('exec: "sudo mkfs.vfat /dev/sda1 && sudo mkfs.vfat /dev/sdb1"');
         let { stdout, stderr } = await exec('sudo mkfs.vfat /dev/sda1 && sudo mkfs.vfat /dev/sdb1');
 
-        response = stdout || stderr || stdout2 || stderr2;
+        response = stdout || stderr;
       }
       catch (e) {
         console.error(`There is an error: ${e}`);
@@ -187,7 +187,7 @@ module.exports = {
         console.log('exec: "sudo mkfs.ext4 -v -m .1 -b 4096 -E stride=32,stripe-width=64 /dev/md0"');
         let { stdout, stderr } = await exec('sudo mkfs.ext4 -v -m .1 -b 4096 -E stride=32,stripe-width=64 /dev/md0');
 
-        response = stdout || stderr || stdout2 || stderr2;
+        response = stdout || stderr;
       }
       catch (e) {
         console.error(`There is an error: ${e}`);
@@ -207,7 +207,7 @@ module.exports = {
         console.log('exec: "sudo mount /dev/md0 /mnt"');
         let { stdout, stderr } = await exec('sudo mount /dev/md0 /mnt');
 
-        response = stdout || stderr || stdout2 || stderr2;
+        response = stdout || stderr;
       }
       catch (e) {
         console.error(`There is an error: ${e}`);
