@@ -221,7 +221,7 @@ module.exports = {
 
         const { UUID } = await getUUID_RAID();
         console.log('UUID: ', UUID);
-        
+
         if (UUID) {
           console.log('exec: "sudo chown pi:pi /etc/fstab"');
           await exec('sudo chown pi:pi /etc/fstab');
@@ -319,6 +319,8 @@ async function getUUID_RAID () {
         return current.UUID;
       }
     });
+    
+    console.log('UUID: ', UUID);
   }
   catch (e) {
     console.error(`There is an error: ${e}`);
