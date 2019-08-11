@@ -219,10 +219,16 @@ module.exports = {
         console.log('exec: "sudo cp /etc/fstab /etc/fstab.bak"');
         await exec('sudo cp /etc/fstab /etc/fstab.bak ');
 
-        const UUID = getUUID_RAID();
+        const UUID = await getUUID_RAID();
         if (UUID) {
-          console.log(`exec: "sudo echo "UUID=${UUID} /mnt ext4 defaults 0 0" >> /etc/fstab"`);
-          let { stdout, stderr } = await exec(`sudo echo "UUID=${UUID} /mnt ext4 defaults 0 0" >> /etc/fstab`);
+          console.log('exec: "sudo chown pi:pi /etc/fstab"');
+          await exec('sudo chown pi:pi /etc/fstab');
+
+          console.log(`exec: "echo "UUID=${UUID} /mnt ext4 defaults 0 0" >> /etc/fstab"`);
+          let { stdout, stderr } = await exec(`echo "UUID=${UUID} /mnt ext4 defaults 0 0" >> /etc/fstab`);
+
+          console.log('exec: "sudo chown root:root /etc/fstab"');
+          await exec('sudo chown root:root /etc/fstab');
           
           response = stdout || stderr;
         }
