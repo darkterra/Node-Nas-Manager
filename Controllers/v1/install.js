@@ -302,7 +302,7 @@ async function getBLKID () {
     throw e;
   }
   finally {
-    return { response };
+    return new Promise(resolve => resolve({ response }));
   }
 }
 
@@ -312,7 +312,7 @@ async function getUUID_RAID () {
   try {
     let { UUID } = await getBLKID();
     console.log('UUID: ', UUID);
-    
+
     UUID = UUID.reduce((acc, current) => {
       if (current.FILESYS === '/dev/md0') {
         return current.UUID;
