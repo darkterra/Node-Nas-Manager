@@ -165,8 +165,8 @@ module.exports = {
       let response = null;
 
       try {
-        console.log('exec: "sudo mkfs.vfat -F 32 /dev/sda1 && sudo mkfs.vfat -F 32 /dev/sdb1"');
-        let { stdout, stderr } = await exec('sudo mkfs.vfat -F 32 /dev/sda1 && sudo mkfs.vfat -F 32 /dev/sdb1');
+        console.log('exec: "echo y | sudo mkfs.vfat -F 32 /dev/sda1 && sudo mkfs.vfat -F 32 /dev/sdb1"');
+        let { stdout, stderr } = await exec('echo y | sudo mkfs.vfat -F 32 /dev/sda1 && sudo mkfs.vfat -F 32 /dev/sdb1');
 
         response = stdout || stderr;
       }
@@ -184,8 +184,8 @@ module.exports = {
       let response = null;
 
       try {
-        console.log('exec: "sudo mkfs.ext4 -v -m .1 -b 4096 -E stride=32,stripe-width=64 /dev/md0"');
-        let { stdout, stderr } = await exec('sudo mkfs.ext4 -v -m .1 -b 4096 -E stride=32,stripe-width=64 /dev/md0');
+        console.log('exec: "echo y | sudo mkfs.ext4 -v -m .1 -b 4096 -E stride=32,stripe-width=64 /dev/md0"');
+        let { stdout, stderr } = await exec('echo y | sudo mkfs.ext4 -v -m .1 -b 4096 -E stride=32,stripe-width=64 /dev/md0');
 
         response = stdout || stderr;
       }
