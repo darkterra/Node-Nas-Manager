@@ -316,7 +316,7 @@ async function getUUID_RAID () {
   try {
     let { response } = await getBLKID();
 
-    UUID = response.UUID.reduce((acc, current) => {
+    UUID = response.reduce((acc, current) => {
       if (current.FILESYS === '/dev/md0') {
         return current.UUID;
       }
