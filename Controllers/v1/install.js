@@ -219,8 +219,7 @@ module.exports = {
         console.log('exec: "sudo cp /etc/fstab /etc/fstab.bak"');
         await exec('sudo cp /etc/fstab /etc/fstab.bak ');
 
-        const UUID = await getUUID_RAID();
-        console.log('UUID: ', UUID);
+        const { UUID } = await getUUID_RAID();
 
         if (UUID) {
           console.log('exec: "sudo chown pi:pi /etc/fstab"');
@@ -233,6 +232,9 @@ module.exports = {
           await exec('sudo chown root:root /etc/fstab');
           
           response = stdout || stderr;
+        }
+        else {
+          response = "An error when try to get the UUID of the RAID";
         }
       }
       catch (e) {
@@ -312,9 +314,9 @@ async function getUUID_RAID () {
   let UUID = null;
 
   try {
-    let { response: UUID } = await getBLKID();
+    let { response } = await getBLKID();
 
-    UUID = UUID.reduce((acc, current) => {
+    UUID = response.UUID.reduce((acc, current) => {
       if (current.FILESYS === '/dev/md0') {
         return current.UUID;
       }
