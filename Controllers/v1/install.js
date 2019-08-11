@@ -221,11 +221,11 @@ module.exports = {
 
         const UUID = getUUID_RAID();
         if (UUID) {
-          console.log('exec: "sudo mount /dev/md0 /media/USBHDD/"');
+          console.log(`exec: "sudo echo "UUID=${UUID} /mnt ext4 defaults 0 0" >> /etc/fstab"`);
           let { stdout, stderr } = await exec(`sudo echo "UUID=${UUID} /mnt ext4 defaults 0 0" >> /etc/fstab`);
+          
+          response = stdout || stderr;
         }
-
-        response = stdout || stderr;
       }
       catch (e) {
         console.error(`There is an error: ${e}`);
@@ -319,8 +319,6 @@ async function getUUID_RAID () {
     return { response };
   }
 }
-
-getUUID_RAID();
 
 async function getProgressionRAID () {
   let response = null;
