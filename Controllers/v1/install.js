@@ -57,35 +57,7 @@ module.exports = {
     });
 
     fastify.get('/blkid', async (request, reply) => {
-      let response = null;
-
-      try {
-        const { stdout, stderr } = await exec('blkid');
-        let data = stdout.replace(/"/g, '').split('\n');
-
-        if (data.length > 0) {
-          data = data.filter(element => element.includes('UUID=') && element !== '').map(element => {
-            const [FILESYS, REST] = element.split(':');
-
-            const temp = REST.split(' ').filter(element => element !== '');
-            const { LABEL, UUID, TYPE, PARTUUID } = Object.fromEntries(temp.map(el => el.split('=')));
-            
-            return { FILESYS, LABEL, UUID, TYPE, PARTUUID };
-          }).filter(element => element.LABEL !== 'boot' || element.LABEL !== 'rootfs');
-        }
-        
-        console.log('data:', data);
-        console.log('stderr:', stderr);
-        
-        response = data || stderr;
-      }
-      catch (e) {
-        console.error(`There is an error: ${e}`);
-        throw e;
-      }
-      finally {
-        return { response };
-      }
+      return await getBLKID();
     });
     
     fastify.get('/RAID1', async (request, reply) => {
@@ -239,6 +211,35 @@ module.exports = {
         return { response };
       }
     });
+    
+    fastify.get('/confAutoMount', async (request, reply) => {
+      let response = null;
+      
+      try {
+        console.log('exec: "sudo cp /etc/fstab /etc/fstab.bak"');
+        await exec('sudo cp /etc/fstab /etc/fstab.bak ');
+
+        const UUID = getUUID_RAID();
+        if (UUID) {
+          console.log('exec: "sudo mount /dev/md0 /media/USBHDD/"');
+          let { stdout, stderr } = await exec(`sudo echo "UUID=${UUID} /mnt ext4 defaults 0 0" >> /etc/fstab`);
+        }
+
+        response = stdout || stderr;
+      }
+      catch (e) {
+        console.error(`There is an error: ${e}`);
+        response = e;
+        throw e;
+      }
+      finally {
+        return { response };
+      }
+    });
+
+
+
+    
 
     fastify.get('/:command', async (request, reply) => {
       let response = null;
@@ -267,7 +268,59 @@ module.exports = {
 }
 
 
+async function getBLKID () {
+  let response = null;
 
+  try {
+    const { stdout, stderr } = await exec('blkid');
+    let data = stdout.replace(/"/g, '').split('\n');
+
+    if (data.length > 0) {
+      data = data.filter(element => element.includes('UUID=') && element !== '').map(element => {
+        const [FILESYS, REST] = element.split(':');
+
+        const temp = REST.split(' ').filter(element => element !== '');
+        const { LABEL, UUID, TYPE, PARTUUID } = Object.fromEntries(temp.map(el => el.split('=')));
+        
+        return { FILESYS, LABEL, UUID, TYPE, PARTUUID };
+      }).filter(element => element.LABEL !== 'boot' || element.LABEL !== 'rootfs');
+    }
+    
+    console.log('data:', data);
+    console.log('stderr:', stderr);
+    
+    response = data || stderr;
+  }
+  catch (e) {
+    console.error(`There is an error: ${e}`);
+    throw e;
+  }
+  finally {
+    return { response };
+  }
+}
+
+async function getUUID_RAID () {
+  let response = null;
+
+  try {
+    let { response } = await getBLKID();
+    response = response.reduce((acc, current) => {
+      if (current.FILESYS === '/dev/md0') {
+        return current.UUID;
+      }
+    });
+  }
+  catch (e) {
+    console.error(`There is an error: ${e}`);
+    throw e;
+  }
+  finally {
+    return { response };
+  }
+}
+
+getUUID_RAID();
 
 async function getProgressionRAID () {
   let response = null;
