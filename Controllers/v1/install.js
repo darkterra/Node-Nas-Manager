@@ -321,6 +321,7 @@ async function getUUID_RAID () {
     });
 
     console.log('UUID: ', UUID);
+    console.log('typeof UUID: ', typeof UUID);
   }
   catch (e) {
     console.error(`There is an error: ${e}`);
