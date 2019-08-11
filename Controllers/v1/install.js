@@ -319,16 +319,15 @@ async function getUUID_RAID () {
         return current.UUID;
       }
     });
-    
+
     console.log('UUID: ', UUID);
   }
   catch (e) {
     console.error(`There is an error: ${e}`);
     throw e;
   }
-  finally {
-    return new Promise(resolve => resolve({ UUID }));
-  }
+  
+  return new Promise(resolve => resolve({ UUID }));
 }
 
 async function getProgressionRAID () {
