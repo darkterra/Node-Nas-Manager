@@ -220,6 +220,8 @@ module.exports = {
         await exec('sudo cp /etc/fstab /etc/fstab.bak ');
 
         const { UUID } = await getUUID_RAID();
+        console.log('UUID: ', UUID);
+        
         if (UUID) {
           console.log('exec: "sudo chown pi:pi /etc/fstab"');
           await exec('sudo chown pi:pi /etc/fstab');
