@@ -219,7 +219,7 @@ module.exports = {
         console.log('exec: "sudo cp /etc/fstab /etc/fstab.bak"');
         await exec('sudo cp /etc/fstab /etc/fstab.bak ');
 
-        const UUID = await getUUID_RAID();
+        const { UUID } = await getUUID_RAID();
         if (UUID) {
           console.log('exec: "sudo chown pi:pi /etc/fstab"');
           await exec('sudo chown pi:pi /etc/fstab');
@@ -307,11 +307,11 @@ async function getBLKID () {
 }
 
 async function getUUID_RAID () {
-  let response = null;
+  let UUID = null;
 
   try {
-    let { response } = await getBLKID();
-    response = response.reduce((acc, current) => {
+    let { UUID } = await getBLKID();
+    UUID = UUID.reduce((acc, current) => {
       if (current.FILESYS === '/dev/md0') {
         return current.UUID;
       }
@@ -322,7 +322,7 @@ async function getUUID_RAID () {
     throw e;
   }
   finally {
-    return { response };
+    return { UUID };
   }
 }
 
