@@ -310,7 +310,7 @@ async function getUUID_RAID () {
   let UUID = null;
 
   try {
-    let { UUID } = await getBLKID();
+    let { response: UUID } = await getBLKID();
     console.log('UUID: ', UUID);
 
     UUID = UUID.reduce((acc, current) => {
