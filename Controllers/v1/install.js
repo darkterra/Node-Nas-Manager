@@ -219,7 +219,7 @@ module.exports = {
         console.log('exec: "sudo cp /etc/fstab /etc/fstab.bak"');
         await exec('sudo cp /etc/fstab /etc/fstab.bak ');
 
-        const { UUID } = await getUUID_RAID();
+        const UUID = await getUUID_RAID();
         console.log('UUID: ', UUID);
 
         if (UUID) {
@@ -326,7 +326,7 @@ async function getUUID_RAID () {
     console.error(`There is an error: ${e}`);
     throw e;
   }
-  
+
   return new Promise(resolve => resolve({ UUID }));
 }
 
