@@ -254,11 +254,11 @@ module.exports = {
         console.log('exec: "sudo useradd nnm -m -G users"');
         await exec('sudo useradd nnm -m -G users');
         
-        console.log('exec: "echo nnm | sudo passwd nnm"');
-        await exec('echo nnm | sudo passwd nnm');
+        console.log(`exec: "printf 'nnm\nnnm' | sudo passwd nnm"`);
+        await exec(`printf 'nnm\nnnm' | sudo passwd nnm`);
         
-        console.log('exec: "sudo smbpasswd -a nnm"');
-        await exec('sudo smbpasswd -a nnm');
+        console.log(`exec: "printf 'nnm\nnnm' | sudo smbpasswd -a nnm"`);
+        await exec(`printf 'nnm\nnnm' | sudo smbpasswd -a nnm`);
         
         // ------------------------------------------------------------
 
