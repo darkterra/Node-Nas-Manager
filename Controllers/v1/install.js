@@ -2,7 +2,7 @@
 
 // const util = require('util');
 // const exec = util.promisify(require('child_process').exec);
-const { mkdirSync } = require('fs');
+const { writeFileSync } = require('fs');
 const { exec } = require('shelljs');
 
 // v1/install.js
@@ -216,8 +216,8 @@ module.exports = {
       let response = null;
       
       try {
-        console.log('exec: "sudo cp /etc/fstab /etc/fstab.bak"');
-        await exec('sudo cp /etc/fstab /etc/fstab.bak ');
+        console.log('exec: "sudo cp /etc/fstab /etc/fstab.backup"');
+        await exec('sudo cp /etc/fstab /etc/fstab.backup');
 
         const { UUID } = await getUUID_RAID();
 
@@ -246,9 +246,106 @@ module.exports = {
         return { response };
       }
     });
+    
+    fastify.get('/confSamba', async (request, reply) => {
+      let response = null;
+      
+      try {
+        console.log('exec: "sudo useradd nnm -m -G users"');
+        await exec('sudo useradd nnm -m -G users');
+        
+        console.log('exec: "echo nnm | sudo passwd nnm"');
+        await exec('echo nnm | sudo passwd nnm');
+        
+        console.log('exec: "sudo smbpasswd -a nnm"');
+        await exec('sudo smbpasswd -a nnm');
+        
+        // ------------------------------------------------------------
+
+        console.log('exec: "sudo mkdir /media/USBHDD/NAS00"');
+        await exec('sudo mkdir /media/USBHDD/NAS00');
+        
+        console.log('exec: "sudo mkdir /media/USBHDD/NAS00/MultiMedia"');
+        await exec('sudo mkdir /media/USBHDD/NAS00/MultiMedia');
+        
+        console.log('exec: "sudo mkdir /media/USBHDD/NAS00/Private"');
+        await exec('sudo mkdir /media/USBHDD/NAS00/Private');
+        
+        console.log('exec: "sudo chmod 777 -R /media/USBHDD"');
+        await exec('sudo chmod 777 -R /media/USBHDD');
+        
+        // ------------------------------------------------------------
+
+        console.log('exec: "sudo cp /etc/samba/smb.conf /etc/samba/smb.conf.backup"');
+        await exec('sudo cp /etc/samba/smb.conf /etc/samba/smb.conf.backup');
+        
+        console.log('exec: "sudo chown pi:pi /etc/samba/smb.conf"');
+        await exec('sudo chown pi:pi /etc/samba/smb.conf');
+
+        const sambaConf = `
+          [global]
+            workgroup = WORKGROUP
+            server string = %h server
+            netbios name = NAS00
+            dns proxy = no
+            log file = /var/log/samba/log.%m
+            max log size = 1000
+            syslog = 0
+            panic action = /usr/share/samba/panic-action %d
+            security = user
+            encrypt passwords = true 
+            passdb backend = tdbsam
+            obey pam restrictions = yes
+            unix password sync = yes
+            passwd program = /usr/bin/passwd %u
+            passwd chat = *Enter\snew\s*\spassword:* %n\n *Retype\snew\s*\spassword:* %n\n *password\supdated\ssuccessfully* .
+            pam password change = yes
+            map to guest = bad user
+            usershare allow guests = yes
+
+          [Public]
+            path =/media/USBHDD/NAS00/Public
+            read only = no
+            locking = no
+            guest ok = yes
+            force user = pi
+
+          [Private]
+            browseable = no
+            path = /media/USBHDD/NAS00/Private
+            writable = yes
+            username = nnm
+            only user = yes
+            create mode = 0600
+            directory mask = 0700
+        `;
+
+        writeFileSync('/etc/samba/smb.conf', sambaConf);
+        
+        console.log('exec: "sudo chown root:root /etc/samba/smb.conf"');
+        await exec('sudo chown root:root /etc/samba/smb.conf');
 
 
+        // ------------------------------------------------------------
 
+        console.log('exec: "sudo /etc/init.d/samba restart"');
+        await exec('sudo /etc/init.d/samba restart');
+        
+        response = 'DONE';
+      }
+      catch (e) {
+        console.error(`There is an error: ${e}`);
+        response = e;
+        throw e;
+      }
+      finally {
+        return { response };
+      }
+    });
+
+
+    // printf 'nnm\nnnm' | sudo smbpasswd -a pi
+    // To remove ===> sudo smbpasswd -x pi
     
 
     fastify.get('/:command', async (request, reply) => {
@@ -321,9 +418,6 @@ async function getUUID_RAID () {
         return current.UUID;
       }
     });
-
-    console.log('UUID: ', UUID);
-    console.log('typeof UUID: ', typeof UUID);
   }
   catch (e) {
     console.error(`There is an error: ${e}`);
