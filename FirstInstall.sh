@@ -6,10 +6,10 @@ echo "############################### Update the RPI ###########################
 sudo apt-get update && sudo apt-get upgrade -y
 
 # Install Docker
-# curl -sSL https://get.docker.com | sh
+curl -sSL https://get.docker.com | sh
 
 # Test Docker
-# sudo docker run hello-world
+sudo docker run hello-world
 
 # Enable SSH by default
 echo ""
@@ -49,6 +49,17 @@ echo ""
 echo "############################### Launch the service ###############################"
 pm2 start server.js
 
+# Confs
+echo ""
+echo "############################### Change HostName ###############################"
+sudo ln -sfn /usr/share/zoneinfo/Europe/Paris /etc/localtime
+sudo sed -i -e "s/raspberrypi/NAS00/" /etc/hostname
+sudo sed -i -e "s/raspberrypi/NAS00/" /etc/hosts
+
+echo ""
+echo "############################### Create BDD Folder ###############################"
+# Create the BDD Folder
+mkdir $HOME/BDD
 
 # This install is now finish => Time to remove this First Install Script...
 echo ""
