@@ -282,49 +282,51 @@ module.exports = {
         console.log('exec: "sudo chown pi:pi /etc/samba/smb.conf"');
         await exec('sudo chown pi:pi /etc/samba/smb.conf');
 
-        const sambaConf = `
-          [global]
-            workgroup = WORKGROUP
-            server string = %h server
-            netbios name = NAS00
-            dns proxy = no
-            log file = /var/log/samba/log.%m
-            max log size = 1000
-            syslog = 0
-            panic action = /usr/share/samba/panic-action %d
-            security = user
-            encrypt passwords = true 
-            passdb backend = tdbsam
-            obey pam restrictions = yes
-            unix password sync = yes
-            passwd program = /usr/bin/passwd %u
-            passwd chat = *Enter\snew\s*\spassword:* %n\n *Retype\snew\s*\spassword:* %n\n *password\supdated\ssuccessfully* .
-            pam password change = yes
-            map to guest = bad user
-            usershare allow guests = yes
+        const sambaConf = `[global]
+  workgroup = WORKGROUP
+  server string = %h server
+  netbios name = NAS00
+  dns proxy = no
+  log file = /var/log/samba/log.%m
+  max log size = 1000
+  syslog = 0
+  panic action = /usr/share/samba/panic-action %d
+  security = user
+  encrypt passwords = true 
+  passdb backend = tdbsam
+  obey pam restrictions = yes
+  unix password sync = yes
+  passwd program = /usr/bin/passwd %u
+  passwd chat = *Enter\snew\s*\spassword:* %n\n *Retype\snew\s*\spassword:* %n\n *password\supdated\ssuccessfully* .
+  pam password change = yes
+  map to guest = bad user
+  usershare allow guests = yes
 
-          [Public]
-            path =/media/USBHDD/NAS00/Public
-            read only = no
-            locking = no
-            guest ok = yes
-            force user = pi
+[Public]
+  path =/media/USBHDD/NAS00/Public
+  read only = no
+  locking = no
+  guest ok = yes
+  force user = pi
 
-          [Private]
-            browseable = no
-            path = /media/USBHDD/NAS00/Private
-            writable = yes
-            username = nnm
-            only user = yes
-            create mode = 0600
-            directory mask = 0700
-        `;
+[Private]
+  browseable = no
+  path = /media/USBHDD/NAS00/Private
+  writable = yes
+  username = nnm
+  only user = yes
+  create mode = 0600
+  directory mask = 0700
+`;
 
+        console.log('Write new Conf...');
         writeFileSync('/etc/samba/smb.conf', sambaConf);
         
         console.log('exec: "sudo chown root:root /etc/samba/smb.conf"');
         await exec('sudo chown root:root /etc/samba/smb.conf');
-
+        
+        console.log('exec: "sudo chown nnm:nnm /media/USBHDD/NAS00/Private/"');
+        await exec('sudo chown nnm:nnm /media/USBHDD/NAS00/Private/');
 
         // ------------------------------------------------------------
 
