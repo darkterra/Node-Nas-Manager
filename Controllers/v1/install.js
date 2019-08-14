@@ -302,8 +302,8 @@ module.exports = {
   map to guest = bad user
   usershare allow guests = yes
 
-[Public]
-  path =/media/USBHDD/NAS00/Public
+[MultiMedia]
+  path =/media/USBHDD/NAS00/MultiMedia
   read only = no
   locking = no
   guest ok = yes
