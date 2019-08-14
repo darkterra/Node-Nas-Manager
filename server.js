@@ -10,6 +10,7 @@ const statics = require('fastify-static');
 const io = require('socket.io')(fastify.server);
 
 // Controllers Requirement
+const Test = require('./Controllers/v1/tests');
 const User = require('./Controllers/v1/users');
 const Install = require('./Controllers/v1/install');
 
@@ -37,6 +38,7 @@ fastify.register(statics, {
 });
 
 // Routing
+fastify.register(Test.router, { prefix: '/v1/test', io });
 fastify.register(User.router, { prefix: '/v1/user', io });
 fastify.register(Install.router, { prefix: '/v1/install', io });
 
