@@ -327,11 +327,14 @@ module.exports = {
         
         console.log('exec: "sudo chown nnm:nnm /media/USBHDD/NAS00/Private/"');
         await exec('sudo chown nnm:nnm /media/USBHDD/NAS00/Private/');
+        
+        console.log('exec: "sudo chown pi:pi /media/USBHDD/NAS00/MultiMedia/"');
+        await exec('sudo chown pi:pi /media/USBHDD/NAS00/MultiMedia/');
 
         // ------------------------------------------------------------
 
-        console.log('exec: "sudo /etc/init.d/samba restart"');
-        await exec('sudo /etc/init.d/samba restart');
+        console.log('exec: "sudo /etc/init.d/samba-ad-dc restart"');
+        await exec('sudo /etc/init.d/samba-ad-dc restart');
         
         response = 'DONE';
       }
