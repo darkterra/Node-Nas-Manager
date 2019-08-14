@@ -5,6 +5,44 @@
 const { writeFileSync } = require('fs');
 const { exec } = require('shelljs');
 
+const interval = 1000 * 60;
+const sambaConf = `[global]
+  workgroup = WORKGROUP
+  server string = %h server
+  netbios name = NAS00
+  dns proxy = no
+  log file = /var/log/samba/log.%m
+  max log size = 1000
+  syslog = 0
+  panic action = /usr/share/samba/panic-action %d
+  security = user
+  encrypt passwords = true 
+  passdb backend = tdbsam
+  obey pam restrictions = yes
+  unix password sync = yes
+  passwd program = /usr/bin/passwd %u
+  passwd chat = *Enter\\snew\\s*\\spassword:* %n\\n *Retype\\snew\\s*\\spassword:* %n\\n *password\\supdated\\ssuccessfully* .
+  pam password change = yes
+  map to guest = bad user
+  usershare allow guests = yes
+
+[MultiMedia]
+  path =/media/USBHDD/NAS00/MultiMedia
+  read only = no
+  locking = no
+  guest ok = yes
+  force user = pi
+
+[Private]
+  browseable = no
+  path = /media/USBHDD/NAS00/Private
+  writable = yes
+  username = nnm
+  only user = yes
+  create mode = 0600
+  directory mask = 0700
+`;
+
 // v1/install.js
 module.exports = {
   router: (fastify, opts, done) => {
@@ -282,43 +320,6 @@ module.exports = {
         console.log('exec: "sudo chown pi:pi /etc/samba/smb.conf"');
         await exec('sudo chown pi:pi /etc/samba/smb.conf');
 
-        const sambaConf = `[global]
-  workgroup = WORKGROUP
-  server string = %h server
-  netbios name = NAS00
-  dns proxy = no
-  log file = /var/log/samba/log.%m
-  max log size = 1000
-  syslog = 0
-  panic action = /usr/share/samba/panic-action %d
-  security = user
-  encrypt passwords = true 
-  passdb backend = tdbsam
-  obey pam restrictions = yes
-  unix password sync = yes
-  passwd program = /usr/bin/passwd %u
-  passwd chat = *Enter\\snew\\s*\\spassword:* %n\\n *Retype\\snew\\s*\\spassword:* %n\\n *password\\supdated\\ssuccessfully* .
-  pam password change = yes
-  map to guest = bad user
-  usershare allow guests = yes
-
-[MultiMedia]
-  path =/media/USBHDD/NAS00/MultiMedia
-  read only = no
-  locking = no
-  guest ok = yes
-  force user = pi
-
-[Private]
-  browseable = no
-  path = /media/USBHDD/NAS00/Private
-  writable = yes
-  username = nnm
-  only user = yes
-  create mode = 0600
-  directory mask = 0700
-`;
-
         console.log('Write new Conf...');
         writeFileSync('/etc/samba/smb.conf', sambaConf);
         
@@ -452,19 +453,16 @@ async function getProgressionRAID () {
 }
 
 function requestProgressionRAID_UntilIsFinish () {
-  let syncFinish = false;
+  let i = 0;
   let response = null;
   let idInterval = null;
 
-  // if (!syncFinish) {
-    idInterval = setInterval(() => {
-      response = getProgressionRAID();
-      console.log('Progess: ', response);
-      
-      if (response.includes('resync')) {
-        // syncFinish = true;
-        idInterval && clearInterval(idInterval);
-      }
-    }, 1000 * 60);
-  // }
+  idInterval = setInterval(() => {
+    response = input[i++];
+    console.log('Progess: ', response);
+    
+    if (response.includes('resync = 100')) {
+      idInterval && clearInterval(idInterval);
+    }
+  }, interval);
 }
