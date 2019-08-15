@@ -5,7 +5,7 @@ const Datastore = require('nedb');
 const moment = require('moment');
 
 const db = {};
-db.fileSystem = new Datastore({ filename: join(__dirname, '..', '..', 'BDD', 'fileSystem.db'), autoload: true });
+db.fileSystem = new Datastore({ filename: join(__dirname, '..', '..', '..', 'BDD', 'fileSystem.db'), autoload: true });
 
 module.exports = {
   router: (fastify, opts, done) => {
