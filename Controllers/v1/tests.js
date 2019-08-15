@@ -152,7 +152,7 @@ module.exports = {
         ]}
       ];
 
-      db.fileSystem.insert(doc, err => {
+      db.fileSystem.insert(tree_data, err => {
         if (err) {
           throw err;
         }
