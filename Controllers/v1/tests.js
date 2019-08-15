@@ -345,7 +345,7 @@ module.exports = {
         }
         else {
           console.log('Doc: ', doc);
-          return [doc];
+          return [...doc];
         }
       });
       
