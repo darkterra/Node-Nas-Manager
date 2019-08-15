@@ -198,7 +198,7 @@ module.exports = {
     });
 
     
-    fastify.get('/all', async (request, reply) => {
+    fastify.get('/all', (request, reply) => {
       const all_data = [
         { "id":"root", "type": "folder", "value": "NAS00", open:true, "data": [
           { "id": "1", "type": "folder", "value": "Films", "files": [
@@ -345,7 +345,7 @@ module.exports = {
         }
         else {
           console.log('Doc: ', doc);
-          return [doc];
+          reply.send([doc]);
         }
       });
       
