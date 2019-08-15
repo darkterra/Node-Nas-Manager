@@ -1,19 +1,20 @@
 {
-    "name": "node_nas_management",
-    "version": "0.0.1",
-    "description": "Node.js on Docker ?",
-    "author": "DarkTerra",
-    "main": "server.js",
-    "scripts": {
-      "start": "node server.js"
-    },
-    "dependencies": {
-      "fastify": "^2.7.1",
-      "fastify-helmet": "^3.0.1",
-      "fastify-static": "^2.5.0",
-      "shelljs": "^0.8.3",
-      "moment": "^2.24.0",
-      "socket.io": "^2.2.0",
-      "webix": "^6.4.0"
-    }
+  "name": "node_nas_management",
+  "version": "0.0.1",
+  "description": "Node.js on Docker ?",
+  "author": "DarkTerra",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "fastify": "^2.7.1",
+    "fastify-helmet": "^3.0.1",
+    "fastify-static": "^2.5.0",
+    "moment": "^2.24.0",
+    "nedb": "^1.8.0",
+    "shelljs": "^0.8.3",
+    "socket.io": "^2.2.0",
+    "webix": "^6.4.0"
   }
+}

@@ -6,10 +6,10 @@ echo "############################### Update the RPI ###########################
 sudo apt-get update && sudo apt-get upgrade -y
 
 # Install Docker
-curl -sSL https://get.docker.com | sh
+# curl -sSL https://get.docker.com | sh
 
 # Test Docker
-sudo docker run hello-world
+# sudo docker run hello-world
 
 # Enable SSH by default
 echo ""
@@ -19,7 +19,7 @@ sudo touch /boot/ssh
 # Install all important tools
 echo ""
 echo "############################### Install all important tools ###############################"
-sudo apt-get install mdadm samba samba-common-bin git htop -y
+sudo apt-get install mdadm samba samba-common-bin git htop mongodb-server -y
 
 # Install usbmount after creating the RAID 1 ?
 
