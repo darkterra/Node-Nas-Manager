@@ -17,139 +17,215 @@ module.exports = {
     // ! TEMP ROUTE
     fastify.get('/setAllData', async (request, reply) => {
       const tree_data = [
-        { "id":"root", "type": "folder", "value": "NAS00", open:true, "data": [
-          { "id": "1", "type": "folder", "value": "Films", "files": [
+        {
+          "id":"root", "type": "folder", "value": "NAS00", open:true, "files": [
             {
-              "Name": "The Shawshank Redemption.avi",
-              "Type": "Multimedia",
-              "Date": moment("2010-01-01T05:06:07").toString(),
-              "Size": 5368729120
+              "folderId": "1",
+              "Name": "Films",
+              "IconType": `<span class="mdi mdi-folder"></span>`,
+              "Type": "Folder",
+              "Date": moment("2019-08-14T15:28:32").format('DD/MM/YYYY HH:mm'),
+              "Size": 8589958592
             },
             {
-              "Name": "The Godfather.mkv",
-              "Type": "Multimedia",
-              "Date": moment("2018-11-21T09:46:00").toString(),
-              "Size": 3221229472
+              "folderId": "2",
+              "Name": `Series`,
+              "IconType": `<span class="mdi mdi-folder"></span>`,
+              "Type": "Folder",
+              "Date": moment("2019-08-14T15:28:32").format('DD/MM/YYYY HH:mm'),
+              "Size": 34359794368
+            },
+            {
+              "folderId": "3",
+              "Name": `Images`,
+              "IconType": `<span class="mdi mdi-folder"></span>`,
+              "Type": "Folder",
+              "Date": moment("2019-08-14T15:28:32").format('DD/MM/YYYY HH:mm'),
+              "Size": 52428980
+            },
+            {
+              "folderId": "4",
+              "Name": `WorkSpace`,
+              "IconType": `<span class="mdi mdi-folder"></span>`,
+              "Type": "Folder",
+              "Date": moment("2019-08-14T15:28:32").format('DD/MM/YYYY HH:mm'),
+              "Size": 533391
             }
-          ]},
-          { "id": "2", "type": "folder", "value": "Series", "data": [
-            { "id":"2.1", "type": "folder", "value": "Game Of Thrones", "data": [
-              { "id":"2.1.1", "type": "folder", "value": "Saison 1", "files": [
+          ],
+          "data": [
+            { "id": "1", "type": "folder", "value": "Films", "files": [
+              {
+                "Name": `The Shawshank Redemption.avi`,
+                "IconType": `<span class="mdi mdi-video"></span>`,
+                "Type": "Multimedia",
+                "Date": new Date(1988,1,29),
+                "Size": 5368729120
+              },
+              {
+                "Name": `The Godfather.mkv`,
+                "IconType": `<span class="mdi mdi-video"></span>`,
+                "Type": "Multimedia",
+                "Date": moment("2018-11-21T09:46:00").format('DD/MM/YYYY HH:mm'),
+                "Size": 3221229472
+              }
+            ]},
+            { "id": "2", "type": "folder", "value": "Series", "files": [
+              {
+                "folderId": "2.1",
+                "Name": `Game Of Thrones`,
+                "IconType": `<span class="mdi mdi-folder"></span>`,
+                "Type": "Folder",
+                "Date": moment("2019-08-14T15:28:32").format('DD/MM/YYYY HH:mm'),
+                "Size": 34359794368
+              }
+            ],
+            "data": [
+              { "id":"2.1", "type": "folder", "value": "Game Of Thrones", "files": [
                 {
-                  "Name": "S01E01.Winter Is Coming.mkv",
-                  "Type": "Multimedia",
-                  "Date": moment("2010-01-01T05:06:07").toString(),
-                  "Size": 5368729120
-                },
-                {
-                  "Name": "S01E02.The Kingsroad.mkv",
-                  "Type": "Multimedia",
-                  "Date": moment("2018-11-21T09:46:00").toString(),
-                  "Size": 3221229472
-                },
-                {
-                  "Name": "S01E03.Lord Snow.mkv",
-                  "Type": "Multimedia",
-                  "Date": moment("2018-11-21T09:46:00").toString(),
-                  "Size": 3221229472
-                },
-                {
-                  "Name": "S01E04.Cripples, Bastards, and Broken Things.mkv",
-                  "Type": "Multimedia",
-                  "Date": moment("2018-11-21T09:46:00").toString(),
-                  "Size": 3221229472
-                },
-                {
-                  "Name": "S01E05.The Wolf and the Lion.mkv",
-                  "Type": "Multimedia",
-                  "Date": moment("2018-11-21T09:46:00").toString(),
-                  "Size": 3221229472
-                },
-                {
-                  "Name": "S01E06.A Golden Crown.mkv",
-                  "Type": "Multimedia",
-                  "Date": moment("2018-11-21T09:46:00").toString(),
-                  "Size": 3221229472
-                },
-                {
-                  "Name": "S01E07.You Win or You Die.mkv",
-                  "Type": "Multimedia",
-                  "Date": moment("2018-11-21T09:46:00").toString(),
-                  "Size": 3221229472
-                },
-                {
-                  "Name": "S01E08.The Pointy End.mkv",
-                  "Type": "Multimedia",
-                  "Date": moment("2018-11-21T09:46:00").toString(),
-                  "Size": 3221229472
-                },
-                {
-                  "Name": "S01E09.Baelor.mkv",
-                  "Type": "Multimedia",
-                  "Date": moment("2018-11-21T09:46:00").toString(),
-                  "Size": 3221229472
-                },
-                {
-                  "Name": "S01E10.Fire and Blood.mkv",
-                  "Type": "Multimedia",
-                  "Date": moment("2018-11-21T09:46:00").toString(),
-                  "Size": 3221229472
+                  "folderId": "2.1.1",
+                  "Name": `Saison 1`,
+                  "IconType": `<span class="mdi mdi-folder"></span>`,
+                  "Type": "Folder",
+                  "Date": moment("2019-08-14T15:28:32").format('DD/MM/YYYY HH:mm'),
+                  "Size": 34359794368
                 }
+              ],
+              "data": [
+                { "id":"2.1.1", "type": "folder", "value": "Saison 1", "files": [
+                  {
+                    "Name": `S01E01.Winter Is Coming.mkv`,
+                    "IconType": `<span class="mdi mdi-video"></span>`,
+                    "Type": "Multimedia",
+                    "Date": moment("2010-01-01T05:06:07").format('DD/MM/YYYY HH:mm'),
+                    "Size": 5368729120
+                  },
+                  {
+                    "Name": `S01E02.The Kingsroad.mkv`,
+                    "IconType": `<span class="mdi mdi-video"></span>`,
+                    "Type": "Multimedia",
+                    "Date": moment("2018-11-21T09:46:00").format('DD/MM/YYYY HH:mm'),
+                    "Size": 3221229472
+                  },
+                  {
+                    "Name": `S01E03.Lord Snow.mkv`,
+                    "IconType": `<span class="mdi mdi-video"></span>`,
+                    "Type": "Multimedia",
+                    "Date": moment("2018-11-21T09:46:00").format('DD/MM/YYYY HH:mm'),
+                    "Size": 3221229472
+                  },
+                  {
+                    "Name": `S01E04.Cripples, Bastards, and Broken Things.mkv`,
+                    "IconType": `<span class="mdi mdi-video"></span>`,
+                    "Type": "Multimedia",
+                    "Date": moment("2018-11-21T09:46:00").format('DD/MM/YYYY HH:mm'),
+                    "Size": 3221229472
+                  },
+                  {
+                    "Name": `S01E05.The Wolf and the Lion.mkv`,
+                    "IconType": `<span class="mdi mdi-video"></span>`,
+                    "Type": "Multimedia",
+                    "Date": moment("2018-11-21T09:46:00").format('DD/MM/YYYY HH:mm'),
+                    "Size": 3221229472
+                  },
+                  {
+                    "Name": `S01E06.A Golden Crown.mkv`,
+                    "IconType": `<span class="mdi mdi-video"></span>`,
+                    "Type": "Multimedia",
+                    "Date": moment("2018-11-21T09:46:00").format('DD/MM/YYYY HH:mm'),
+                    "Size": 3221229472
+                  },
+                  {
+                    "Name": `S01E07.You Win or You Die.mkv`,
+                    "IconType": `<span class="mdi mdi-video"></span>`,
+                    "Type": "Multimedia",
+                    "Date": moment("2018-11-21T09:46:00").format('DD/MM/YYYY HH:mm'),
+                    "Size": 3221229472
+                  },
+                  {
+                    "Name": `S01E08.The Pointy End.mkv`,
+                    "IconType": `<span class="mdi mdi-video"></span>`,
+                    "Type": "Multimedia",
+                    "Date": moment("2018-11-21T09:46:00").format('DD/MM/YYYY HH:mm'),
+                    "Size": 3221229472
+                  },
+                  {
+                    "Name": `S01E09.Baelor.mkv`,
+                    "IconType": `<span class="mdi mdi-video"></span>`,
+                    "Type": "Multimedia",
+                    "Date": moment("2018-11-21T09:46:00").format('DD/MM/YYYY HH:mm'),
+                    "Size": 3221229472
+                  },
+                  {
+                    "Name": `S01E10.Fire and Blood.mkv`,
+                    "IconType": `<span class="mdi mdi-video"></span>`,
+                    "Type": "Multimedia",
+                    "Date": moment("2018-11-21T09:46:00").format('DD/MM/YYYY HH:mm'),
+                    "Size": 3221229472
+                  }
+                ]}
               ]}
-            ]}
-          ]},
-          { "id":"3", "type": "folder", "value": "Images", "files": [
-            {
-              "Name": "01 - Christmas.jpg",
-              "Type": "Multimedia",
-              "Date": moment("2015-03-12T12:02:15").toString(),
-              "Size": 3145788
-            },
-            {
-              "Name": "02 - moment's Eve.jpeg",
-              "Type": "Multimedia",
-              // "Date": moment("2013-08-24T19:01:55").toString(),
-              "Date": new Date(1986, 2, 2),
-              "Size": 7340132
-            },
-            {
-              "Name": "03 - New Edge.png",
-              "Type": "Multimedia",
-              "Date": moment("2020-06-24T16:24:06").toString(),
-              "Size": 41943060
+            ]},
+            { "id":"3", "type": "folder", "value": "Images", "files": [
+              {
+                "Name": `01 - Christmas.jpg`,
+                "IconType": `<span class="mdi mdi-file-image"></span>`,
+                "Type": "Multimedia",
+                "Date": moment("2015-03-12T12:02:15").format('DD/MM/YYYY HH:mm'),
+                "Size": 3145788
+              },
+              {
+                "Name": `02 - moment's Eve.jpeg`,
+                "IconType": `<span class="mdi mdi-file-image"></span>`,
+                "Type": "Multimedia",
+                // "Date": moment("2013-08-24T19:01:55").format('DD/MM/YYYY HH:mm'),
+                "Date": new Date(1986, 2, 2),
+                "Size": 7340132
+              },
+              {
+                "Name": `03 - New Edge.png`,
+                "IconType": `<span class="mdi mdi-file-image"></span>`,
+                "Type": "Multimedia",
+                "Date": moment("2020-06-24T16:24:06").format('DD/MM/YYYY HH:mm'),
+                "Size": 41943060
+              }
+            ]},
+            { "id":"4", "type": "folder", "value": "WorkSpace", "data": [
+              {
+                "files": [
+                  {
+                    "Name": `server.js`,
+                    "IconType": `<span class="mdi mdi-nodejs"></span>`,
+                    "Type": "Code",
+                    "Date": moment("2019-08-14T16:15:41").format('DD/MM/YYYY HH:mm'),
+                    "Size": 345728
+                  },
+                  {
+                    "Name": `index.html`,
+                    "IconType": `<span class="mdi mdi-language-html5"></span>`,
+                    "Type": "Code",
+                    "Date": moment("2019-08-14T16:16:55").format('DD/MM/YYYY HH:mm'),
+                    "Size": 40032
+                  },
+                  {
+                    "Name": `mainTheme.css`,
+                    "IconType": `<span class="mdi mdi-language-css3"></span>`,
+                    "Type": "Code",
+                    "Date": moment("2019-08-14T16:16:55").format('DD/MM/YYYY HH:mm'),
+                    "Size": 56064
+                  },
+                  {
+                    "Name": `FirstInstall.sh`,
+                    "IconType": `<span class="mdi mdi-visual-studio-code"></span>`,
+                    "Type": "Code",
+                    "Date": moment("2019-08-14T15:28:32").format('DD/MM/YYYY HH:mm'),
+                    "Size": 91567
+                  }
+                ]
+              }
+            ]
             }
-          ]},
-          { "id":"4", "type": "folder", "value": "WorkSpace", "data": [
-            {
-              "files": [
-                {
-                  "Name": "server.js",
-                  "Type": "Code",
-                  "Date": moment("2019-08-14T16:15:41").toString(),
-                  "Size": 345728
-                },
-                {
-                  "Name": "index.html",
-                  "Type": "Code",
-                  "Date": moment("2019-08-14T16:16:55").toString(),
-                  "Size": 40032
-                },
-                {
-                  "Name": "mainTheme.css",
-                  "Type": "Code",
-                  "Date": moment("2019-08-14T16:16:55").toString(),
-                  "Size": 56064
-                },
-                {
-                  "Name": "FirstInstall.sh",
-                  "Type": "Code",
-                  "Date": moment("2019-08-14T15:28:32").toString(),
-                  "Size": 91567
-                }
-              ]
-            }
-          ]}
-        ]}
+          ]
+        }
       ];
 
       db.fileSystem.insert(tree_data, err => {
