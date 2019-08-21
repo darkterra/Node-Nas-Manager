@@ -15,11 +15,18 @@
       .focusWindows:focus {
         background-color: rgba(0, 81, 255, 0.925);
       }
+
+      .webix_window {
+        user-select: none;
+      }
     </style>
     <button id="FileManager" onclick="openFileManager()">Open File Manager</button>
     <button onclick="test()">Add Item</button>
     <!-- <div id="video_div" style="width:300px; height:200px;"></div> -->
     <script>
+      const serverHost = window.location.origin;
+
+
       let firstTime = true;
 
       // Format Files Sizes
@@ -80,7 +87,7 @@
       const mainTree = {
         view:"edittree",
         id: "mainTree",
-        url:"http://192.168.0.21:3000/v1/test/all",
+        url: `${serverHost}/v1/test/all`,
         type: {
           template: '{common.icon()} <span class="mdi mdi-folder"></span> <span>#value#</span>'   // mdi-folder-outline
         },
@@ -167,6 +174,7 @@
         console.log('onShow FIRED...');
         console.log(win)
         document.getElementById("FileManager").disabled = true;
+        // $$("mainDT").hideOverlay();
       });
 
 
@@ -176,21 +184,79 @@
       });
 
       win.attachEvent("onBeforeShow", () => {
+        // $$("mainDT").showOverLay("Loading");
         $$("mainTree").select($$("mainTree").getFirstId());
+      });
+      
+      $$("mainTree").attachEvent("onAfterLoad", function() {
+        webix.message("Data loaded");
       });
 
       $$("mainDT").attachEvent("onItemDblClick", (...all) => {
-        const folderId = $$("mainDT").find(obj => obj.Name === all[2].textContent.trim(), true).folderId;
+        let folderId = $$("mainDT").find(obj => obj.Name === all[2].textContent.trim(), true).folderId;
         
         if (folderId) {
-          $$("mainTree").open($$("mainDT").find(obj => obj.Name === all[2].textContent.trim(), true).folderId);
-          $$("mainTree").select($$("mainDT").find(obj => obj.Name === all[2].textContent.trim(), true).folderId);
+          firstTime = true;
+
+          do {
+            if (firstTime) {
+              $$("mainTree").select(folderId);
+              firstTime = false;
+            }
+            $$("mainTree").open(folderId);
+
+            folderId = $$("mainTree").getParentId(folderId);
+          } while (folderId !== 'root');
         }
       });
 
       win.attachEvent("onItemClick", (...rest) => {
         console.log('onItemClick FIRED... ', rest);
         // $$("mainTree").select($$("mainTree").getFirstId());
+      });
+
+      // TODO: Send data to modify the real file on server side...
+      $$("mainDT").attachEvent("onAfterEditStop", (state, editor, ignoreUpdate) => {
+        console.log('state: ', state);
+        console.log('editor: ', editor);
+        console.log('ignoreUpdate: ', ignoreUpdate);
+
+        if(ignoreUpdate !== true && state.value !== state.old) {
+          const selectedId = `${$$("mainTree").getSelectedId()}`;
+          const path = [];
+          const dataToSend = {
+            oldValue: state.old,
+            newValue: state.value
+          };
+
+          path.push(selectedId);
+
+          if (selectedId !== 'root') {
+            let folderId = null;
+
+            do {
+              folderId = $$("mainTree").getParentId(folderId || selectedId);
+              path.push(folderId);
+            } while (folderId !== 'root');
+          }
+
+          dataToSend.absoluteBasePath = path.reverse().reduce((acc, current) => acc += `${$$("mainTree").getItem(current).value}/`, '');
+
+          console.log('dataToSend: ', dataToSend);
+
+          // TODO: Send the data to the server to tell him to use the "mv" command for rename file or folder and save into DB and return the new tree of data
+
+          // Lock the ui to avoid multiple renaming the same value and send multiple request "mv" to the server
+          win.disable();
+
+          // TODO: When the serveur send the new tree of data, refresh the ui with new values
+          // Simulate the response of the server, unlock the ui
+          setTimeout(() => {
+            win.enable();
+          }, 1000 * 2);
+
+          webix.message("Cell value was changed");
+        }
       });
 
       $$('mainTree').attachEvent("onBeforeEditStart", id => {
