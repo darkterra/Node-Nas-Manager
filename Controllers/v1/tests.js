@@ -14,6 +14,16 @@ module.exports = {
       socket.on('disconnect', data => console.log(`Disconected: ${data}`));
     });
 
+    fastify.get('/generateFileSystem', async (request, reply) => {
+      fileWalker('/media/USBHDD/NAS00', (err, data) => {
+        if (err) {
+          console.error(err);
+        }
+
+        console.log(data);
+      });
+      return { message: 'Data generated !'};
+    });
     // ! TEMP ROUTE
     fastify.get('/setAllData', async (request, reply) => {
       const tree_data = [
@@ -429,4 +439,46 @@ module.exports = {
     done();
   },
   events: () => undefined
+}
+
+
+function fileWalker (dir, done) {
+  let results = [];
+
+  fs.readdir(dir, (err, list) => {
+    if (err) {
+      return done(err);
+    }
+
+    let pending = list.length;
+
+    if (!pending) {
+      return done(null, results);
+    }
+
+    list.forEach(file => {
+      file = path.resolve(dir, file);
+
+      fs.stat(file, (err, stat) => {
+        if (stat && stat.isDirectory()) {
+          results.push(file);
+
+          fileWalker(file, (err, res) => {
+            results = { ...results, ...res };
+
+            if (! --pending) {
+              done(null, results);
+            }
+          });
+        }
+        else {
+          results.push(file);
+
+          if (! --pending) {
+            done(null, results);
+          }
+        }
+      });
+    });
+  });
 }
