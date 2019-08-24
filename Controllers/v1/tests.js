@@ -443,9 +443,9 @@ module.exports = {
   events: () => undefined
 }
 
-
 function fileWalker (dir, done) {
-  let results = [];
+  let ids = 1;
+  let results = [{ id: "root", type: "folder", value: "NAS00", open: true, files: [], data: [] }];
 
   fs.readdir(dir, (err, list) => {
     if (err) {
@@ -463,7 +463,74 @@ function fileWalker (dir, done) {
 
       fs.stat(file, (err, stat) => {
         if (stat && stat.isDirectory()) {
-          results.push(file);
+          // * Exemple of the structure to use
+            // "id":"root", "type": "folder", "value": "NAS00", open:true, "files": [
+            //   {
+            //     "folderId": "2",
+            //     "Name": `Series`,
+            //     "IconType": `<span class="mdi mdi-folder"></span>`,
+            //     "Type": "Folder",
+            //     "Date": moment("2019-08-14T15:28:32").format('DD/MM/YYYY HH:mm'),
+            //     "Size": 34359794368
+            //   }
+            // ],
+            // "data": [
+            //   { "id": "2", "type": "folder", "value": "Series", "files": [
+            //     {
+            //       "folderId": "2.1",
+            //       "Name": `Game Of Thrones`,
+            //       "IconType": `<span class="mdi mdi-folder"></span>`,
+            //       "Type": "Folder",
+            //       "Date": moment("2019-08-14T15:28:32").format('DD/MM/YYYY HH:mm'),
+            //       "Size": 34359794368
+            //     }
+            //   ],
+            //   "data": [
+            //     { "id":"2.1", "type": "folder", "value": "Game Of Thrones", "files": [
+            //       {
+            //         "folderId": "2.1.1",
+            //         "Name": `Saison 1`,
+            //         "IconType": `<span class="mdi mdi-folder"></span>`,
+            //         "Type": "Folder",
+            //         "Date": moment("2019-08-14T15:28:32").format('DD/MM/YYYY HH:mm'),
+            //         "Size": 34359794368
+            //       }
+            //     ],
+            //     "data": [
+            //       { "id":"2.1.1", "type": "folder", "value": "Saison 1", "files": [
+            //         {
+            //           "Name": `S01E01.Winter Is Coming.mkv`,
+            //           "IconType": `<span class="mdi mdi-video"></span>`,
+            //           "Type": "Multimedia",
+            //           "Date": moment("2010-01-01T05:06:07").format('DD/MM/YYYY HH:mm'),
+            //           "Size": 5368729120
+            //         },
+            //       ]}
+            //     ]}
+            //   ]},
+
+
+
+            //   {
+            //     "folderId": "2",
+            //     "Name": `Series`,
+            //     "IconType": `<span class="mdi mdi-folder"></span>`,
+            //     "Type": "Folder",
+            //     "Date": moment("2019-08-14T15:28:32").format('DD/MM/YYYY HH:mm'),
+            //     "Size": 34359794368
+            //   }
+
+
+          results[0].files.push({
+            folderId: ids.toString(),
+            Name: file,
+            IconType: `<span class="mdi mdi-folder"></span>`,
+            Type: 'Folder',
+            Date: moment(stats.birthtime).format('DD/MM/YYYY HH:mm'),
+            Size: 0
+          });
+
+          ids++;
 
           fileWalker(file, (err, res) => {
             results = { ...results, ...res };
