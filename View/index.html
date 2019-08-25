@@ -331,38 +331,6 @@
         });
       };
 
-      // Format Files Types
-      const defaultIcon = 'mdi-file';
-      const typesFiles = [
-        { type: 'mdi-video', extensionFile: ['avi', 'mov', 'mkv', 'mp4', 'flv'] },
-        { type: 'mdi-file-image', extensionFile: ['jpg', 'jpeg', 'png', 'bmp', 'tif'] },
-        { type: 'mdi-file-music', extensionFile: ['mp3', 'wav', 'flac'] },
-        { type: 'mdi-file-pdf', extensionFile: ['pdf'] },
-        { type: 'mdi-file-excel', extensionFile: ['xls', 'xlsx'] },
-        { type: 'mdi-file-word', extensionFile: ['doc', 'docx'] },
-        { type: 'mdi-file-powerpoint', extensionFile: ['ppt', 'pptx'] },
-        { type: 'mdi-nodejs', extensionFile: ['js'] },
-        { type: 'mdi-language-html5', extensionFile: ['html', 'xhtml', 'htm'] },
-        { type: 'mdi-language-css3', extensionFile: ['css'] },
-        { type: 'mdi-visual-studio-code', extensionFile: ['sh', 'bash', 'php', 'ico', 'h', 'c', 'h++', 'cpp', 'java'] },
-      ];
-
-      function getTypeFile (value) {
-        console.log('value: ', value);
-
-        if (value.includes('.')) {
-          [value] = value.split('.').slice(-1);
-        }
-
-        value = value.toLowerCase();
-        
-        return typesFiles.reduce((acc, current) => {
-          if (current.extensionFile.includes(value)) {
-            acc = current.type;
-          }
-          return acc;
-        }, defaultIcon);
-      }
 
       // // Format Date
       // function formatedDate (value) {
