@@ -95,7 +95,7 @@ function fileWalker (dir, fileSystem, done) {
           fileSystem.data.push({
             id: ids.toString(),
             value: path.basename(file),
-            type: 'Folder',
+            type: 'folder',
             files: [],
             data: []
           });
