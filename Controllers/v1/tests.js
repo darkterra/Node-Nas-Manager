@@ -28,8 +28,8 @@ module.exports = {
 
         console.log('\nDetail Final Result:');
         console.log(JSON.stringify(data));
+        return { message: 'Data generated !', data };
       });
-      return { message: 'Data generated !', data };
     });
     // ! TEMP ROUTE
     fastify.get('/setAllData', async (request, reply) => {
