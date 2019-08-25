@@ -16,7 +16,7 @@ module.exports = {
       socket.on('disconnect', data => console.log(`Disconected: ${data}`));
     });
 
-    fastify.get('/generateFileSystem', async (request, reply) => {
+    fastify.get('/generateFileSystem', (request, reply) => {
       const fileSystem = { id: "root", type: "folder", value: "NAS00", open: true, files: [], data: [] };
 
       fileWalker('/media/USBHDD/NAS00', fileSystem, (err, data) => {
@@ -28,7 +28,7 @@ module.exports = {
 
         console.log('\nDetail Final Result:');
         console.log(JSON.stringify(data));
-        return { message: 'Data generated !', data };
+        reply.send({ message: 'Data generated !', data });
       });
     });
     // ! TEMP ROUTE
