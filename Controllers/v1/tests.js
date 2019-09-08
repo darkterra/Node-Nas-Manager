@@ -5,7 +5,7 @@ const Datastore = require('nedb');
 const moment = require('moment');
 const fs = require('fs');
 const path = require('path');
-const fileSystem = { id: "root", type: "Folder", value: "NAS00", open: true, files: [], data: [] };
+const fileSystem = { id: "root", type: "folder", value: "NAS00", open: true, files: [], data: [] };
 
 const db = {};
 db.fileSystem = new Datastore({ filename: join(__dirname, '..', '..', '..', 'BDD', 'fileSystem.db'), autoload: true });
@@ -82,10 +82,10 @@ function fileWalker (dir, fileSystem, done) {
           const id = newId.next().value;
               
           fileSystem.files.push({
-            FolderId: id,
+            folderId: id,
             Name: path.basename(file),
             IconType: `<span class="mdi mdi-Folder"></span>`,
-            Type: 'Folder',
+            Type: 'folder',
             Date: moment(stat.birthtime).format('DD/MM/YYYY HH:mm'),
             Size: 0
           });
@@ -93,7 +93,7 @@ function fileWalker (dir, fileSystem, done) {
           fileSystem.data.push({
             id,
             value: path.basename(file),
-            type: 'Folder',
+            type: 'folder',
             files: [],
             data: []
           });
