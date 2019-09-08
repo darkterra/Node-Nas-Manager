@@ -5,6 +5,7 @@ const Datastore = require('nedb');
 const moment = require('moment');
 const fs = require('fs');
 const path = require('path');
+const fileSystem = { id: "root", type: "Folder", value: "NAS00", open: true, files: [], data: [] };
 
 const db = {};
 db.fileSystem = new Datastore({ filename: join(__dirname, '..', '..', '..', 'BDD', 'fileSystem.db'), autoload: true });
@@ -17,7 +18,7 @@ module.exports = {
     });
 
     fastify.get('/generateFileSystem', (request, reply) => {
-      const fileSystem = { id: "root", type: "folder", value: "NAS00", open: true, files: [], data: [] };
+      // const fileSystem = { id: "root", type: "folder", value: "NAS00", open: true, files: [], data: [] };
 
       fileWalker('/media/USBHDD/NAS00', fileSystem, (err, data) => {
         if (err) {
@@ -31,6 +32,7 @@ module.exports = {
         reply.send({ message: 'Data generated !', data });
       });
     });
+
     // ! TEMP ROUTE
     fastify.get('/setAllData', async (request, reply) => {
       
@@ -64,8 +66,6 @@ module.exports = {
 
 
 function fileWalker (dir, fileSystem, done) {
-  let ids = 1;
-
   fs.readdir(dir, (err, list) => {
     if (err) {
       return done(err);
@@ -77,14 +77,17 @@ function fileWalker (dir, fileSystem, done) {
       return done(null, fileSystem);
     }
 
+    const newId = getId(fileSystem.id);
+
     list.forEach(file => {
       file = path.resolve(dir, file);
 
       fs.stat(file, (err, stat) => {
         if (stat && stat.isDirectory()) {
-      
+          const id = newId.next().value;
+              
           fileSystem.files.push({
-            FolderId: ids.toString(),
+            FolderId: id,
             Name: path.basename(file),
             IconType: `<span class="mdi mdi-Folder"></span>`,
             Type: 'Folder',
@@ -93,20 +96,18 @@ function fileWalker (dir, fileSystem, done) {
           });
 
           fileSystem.data.push({
-            id: ids.toString(),
+            id,
             value: path.basename(file),
-            type: 'folder',
+            type: 'Folder',
             files: [],
             data: []
           });
-
-          ids++;
 
           fileWalker(file, fileSystem.data[fileSystem.data.length - 1], (err, res) => {
             console.log('res: ', res);
 
             // fileSystem.data.push(res);
-            // fileSystem = { ...fileSystem, ...res };
+            // fileSystem = { ...res, ...fileSystem };
 
             if (! --pending) {
               done(null, fileSystem);
@@ -117,7 +118,7 @@ function fileWalker (dir, fileSystem, done) {
           const { type, iconType } = getTypeFile(file);
 
           fileSystem.files.push({
-            id: ids.toString(),
+            // id: ids.toString(),
             Name: path.basename(file),
             IconType: `<span class="mdi ${iconType}"></span>`,
             Type: type,
@@ -165,4 +166,11 @@ function getTypeFile (value) {
     }
     return acc;
   }, defaultIcon);
+}
+
+function *getId(fullId) {
+  let id = 1;
+  while (true) {
+    yield `${fullId === 'root' ? '' : `${fullId}.`}${id++}`;
+  }
 }
