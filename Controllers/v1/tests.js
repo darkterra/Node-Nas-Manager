@@ -26,25 +26,20 @@ module.exports = {
         }
 
         console.log('final result: ', data);
+        
+        db.fileSystem.insert(data, err => {
+          if (err) {
+            throw err;
+          }
+          else {
+            return { message: 'Data saved !'};
+          }
+        });
 
         console.log('\nDetail Final Result:');
         console.log(JSON.stringify(data));
         reply.send({ message: 'Data generated !', data });
       });
-    });
-
-    // ! TEMP ROUTE
-    fastify.get('/setAllData', async (request, reply) => {
-      
-
-      // db.fileSystem.insert(tree_data, err => {
-      //   if (err) {
-      //     throw err;
-      //   }
-      //   else {
-      //     return { message: 'Data saved !'};
-      //   }
-      // });
     });
     
     fastify.get('/all', (request, reply) => {
